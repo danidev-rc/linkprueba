@@ -19,7 +19,12 @@ export const register = async (req, res) => {
       }
     })
     const token = await createAccessToken({ id: newUser.id })
-    res.cookie('token', token)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+      maxAge: 3600000
+    })
     res.json({ message: 'User registered successfully', user: newUser })
   } catch (error) {
     res.status(400).json({ error: 'Email already in use or invalid data' })
@@ -40,7 +45,13 @@ export const login = async (req, res) => {
 
     const token = await createAccessToken({ id: user.id })
 
-    res.cookie('token', token)
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'none',
+      maxAge: 3600000
+    })
+
     res.json({
       id: user.id,
       name: user.name,
