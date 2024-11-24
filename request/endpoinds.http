@@ -65,3 +65,5 @@ Content-Type: application/json
   "name": "google",
   "color": "blue"
 }
+###
+GET https://linkprueba.vercel.app/api/links
