@@ -9,12 +9,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "src/index.js"
+      "dest": "/"
     }
-  ],
-  "functions": {
-    "src/index.js": {
-      "includeFiles": ["prisma/**", "src/**"]
-    }
-  }
+  ]
 }
