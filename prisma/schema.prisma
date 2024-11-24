@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Links {
+  id          Int       @id @default(autoincrement())
+  url         String
+  linky       String    @unique
+  description String?
+  createdAt   DateTime  @default(now())
+  createdBy   User?     @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  creatorId   Int
+  clicks      Int       @default(0)
+  lastClicked DateTime?
+  tags        LinkTags[]
+}
+
+model Tags {
+  id          Int       @id @default(autoincrement())
+  name        String
+  color       String
+  createdAt   DateTime  @default(now())
+  createdBy   User?     @relation(fields: [creatorId], references: [id])
+  creatorId   Int
+  links       LinkTags[]
+}
+
+model LinkTags {
+  link    Links @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  linkId  Int
+  tag     Tags  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tagId   Int
+
+  @@id([linkId, tagId])
+}
+
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String?
+  username    String?
+  image       String?
+  email       String    @unique
+  password    String
+  limitLinks  Int       @default(30)
+  links       Links[]
+  tags        Tags[]
+}
+
