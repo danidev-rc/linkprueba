@@ -20,11 +20,9 @@ export const register = async (req, res) => {
     })
     const token = await createAccessToken({ id: newUser.id })
     res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-      path: '/', // Asegúrate de que la cookie esté disponible en toda la aplicación
-      maxAge: 3600000
+      httpOnly: process.env.NODE_ENV !== 'development',
+      secure: true,
+      sameSite: 'none'
     })
     res.json({ message: 'User registered successfully', user: newUser })
   } catch (error) {
@@ -46,11 +44,9 @@ export const login = async (req, res) => {
     const token = await createAccessToken({ id: user.id })
 
     res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none',
-      path: '/', // Asegúrate de que la cookie esté disponible en toda la aplicación
-      maxAge: 3600000
+      httpOnly: process.env.NODE_ENV !== 'development',
+      secure: true,
+      sameSite: 'none'
     })
 
     res.json({
