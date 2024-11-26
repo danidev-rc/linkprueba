@@ -5,7 +5,6 @@ import { Github } from '../icons/logos'
 import { ComandK } from '../commandK'
 import ButtonUser from '../auth/user-btn'
 
-
 export default function Navbar() {
   const navVariants = {
     hidden: { opacity: 0, y: -20 },
@@ -85,9 +84,7 @@ export default function Navbar() {
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <ComandK />
           </motion.div>
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <ButtonUser />
-          </motion.div>
+          <ButtonUser />
         </motion.div>
       </nav>
     </motion.header>
