@@ -1,7 +1,7 @@
 {
   "routes": [
     {
-      "src": "/(.*)",
+      "src": "/api/(.*)",
       "dest": "https://linkprueba.onrender.com/$1",
       "headers": {
         "Access-Control-Allow-Credentials": "true",
