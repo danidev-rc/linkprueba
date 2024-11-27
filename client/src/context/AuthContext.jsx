@@ -4,6 +4,7 @@ import {
   registerRequest,
   verifyTokenRequest,
   profileRequest,
+  refreshTokenRequest,
 } from '../api/auth'
 import Cookies from 'js-cookie'
 
@@ -64,8 +65,20 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     Cookies.remove('token')
+    Cookies.remove('refreshToken')
     setUser(null)
     setIsAuthenticated(false)
+  }
+
+  const refreshToken = async () => {
+    try {
+      const res = await refreshTokenRequest()
+      Cookies.set('token', res.data.token)
+    } catch (error) {
+      console.log(error)
+      setIsAuthenticated(false)
+      setUser(null)
+    }
   }
 
   useEffect(() => {
@@ -79,13 +92,19 @@ export const AuthProvider = ({ children }) => {
 
       try {
         const res = await verifyTokenRequest(cookies.token)
-        if (!res.data) return setIsAuthenticated(false)
-        setIsAuthenticated(true)
-        setUser(res.data)
-        setLoading(false)
+        if (!res.data) {
+          await refreshToken()
+          const newRes = await verifyTokenRequest(Cookies.get('token'))
+          setUser(newRes.data)
+          setIsAuthenticated(true)
+        } else {
+          setUser(res.data)
+          setIsAuthenticated(true)
+        }
       } catch (error) {
         console.log(error)
         setIsAuthenticated(false)
+      } finally {
         setLoading(false)
       }
     }
